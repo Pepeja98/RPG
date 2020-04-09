@@ -6,20 +6,31 @@ public class Boxer {
     private int agility;
 
     //strength dependent attributes
-    private int damage;
-    private int defence;
-    private int hp;
-    private int hpRecovery;
+    private double damage;
+    private double defence;
+    private double hp;
+    private double hpRecovery;
+    private double currentHP;
 
     //agility dependent attributes
-    private int stamina;
-    private int staminaRecovery;
-    private int dodge;
+    private double stamina;
+    private double staminaRecovery;
+    private double currentStamina;
+    private double dodge;
 
     public Boxer(int strength, int agility) {
         this.strength = strength;
         this.agility = agility;
         //TODO calculate dependent stats
+	damage = 10 + (strength * 1.6);
+	defence = 2 + strength;
+	hp = 100 + (0.20 + strength);
+	hpRecovery = (0.01 * hp) * strength;
+	currentHP = hp;
+	stamina = 25 + (agility * 0.5);
+	staminaRecovery = 2 + (0.33 * agility);
+	currentStamina = stamina;
+	dodge = 0.025 * agility;        
     }
 
     public int getStrength() {
@@ -45,8 +56,9 @@ public class Boxer {
      *
      * @return outcome damage
      */
-    public int attack() {
+    public double attack() {
         //TODO reduce stamina level, add critical chance???
+        currentStamina = currentStamina - (5 + (0.25 * strength));
         return damage;
     }
 
@@ -58,11 +70,17 @@ public class Boxer {
      */
     public int takeDamage(int incomeDamage) {
         //TODO calc damage done, dodge or reduce hp, take into consideration the defence
+	double injury = incomeDamage - defence;
+	if (injury > 0) {
+	currentHP = currentHP - injury;
+        }
         return 0;
     }
 
     public void recover() {
         //TODO recover hp and stamina
+        currentHP = currentHP + hpRecovery;
+	currentStamina = currentStamina + staminaRecovery;
     }
 
     /**
@@ -71,6 +89,6 @@ public class Boxer {
      * @return true if dead
      */
     public boolean isDead() {
-        return hp <= 0;
+        return currentHP <= 0;
     }
 }
