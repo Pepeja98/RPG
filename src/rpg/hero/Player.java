@@ -1,7 +1,7 @@
 package rpg.hero;
 
-public class Hero extends Boxer {
-    public Hero(int strength, int agility) {
+public class Player extends Boxer {
+    public Player(int strength, int agility) {
         super(strength, agility);
     }
 
